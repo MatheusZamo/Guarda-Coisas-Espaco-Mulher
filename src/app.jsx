@@ -1,7 +1,19 @@
 import { useState } from "react"
 
+const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
+
 const App = () => {
   const [itens, setItens] = useState([])
+
+  const handleClickDelete = (id) =>
+    setItens((i) => i.filter((item) => item.id !== id))
+
+  const handleClickCheck = (id) =>
+    setItens((i) =>
+      i.map((item) =>
+        item.id === id ? { ...item, stored: !item.stored } : item,
+      ),
+    )
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -13,8 +25,9 @@ const App = () => {
       ...i,
       {
         id: crypto.randomUUID(),
-        quantify: selectValue,
+        quantify: +selectValue,
         name: inputValue,
+        stored: false,
       },
     ])
 
@@ -25,7 +38,7 @@ const App = () => {
     <>
       <header className="header">
         <img
-          src="./public/imgs/logo-espaco-mulher.png"
+          src="./public/logo-espaco-mulher.png"
           alt="logo espaço da mulher"
           className="logo"
         />
@@ -35,25 +48,31 @@ const App = () => {
       <form onSubmit={handleSubmit}>
         <label className="label">O que você precisa guardar ?</label>
         <select name="quantidade">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
+          {ids.map((id, index) => (
+            <option key={id} value={index + 1}>
+              {index + 1}
+            </option>
+          ))}
         </select>
         <input name="item" placeholder="Manda aqui" />
-        <button>Adicionar</button>
+        <button className="add">Adicionar</button>
       </form>
 
       <ul className="itensGuardados">
-        {itens.map(({ id, quantify, name }) => (
+        {itens.map(({ id, quantify, name, stored }) => (
           <li key={id}>
-            {quantify} {name}
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={stored}
+              onChange={() => handleClickCheck(id)}
+            />
+            <span className={stored ? "line-through" : ""}>
+              {quantify} {name}
+            </span>
+            <button className="close" onClick={() => handleClickDelete(id)}>
+              ✖️
+            </button>
           </li>
         ))}
       </ul>
