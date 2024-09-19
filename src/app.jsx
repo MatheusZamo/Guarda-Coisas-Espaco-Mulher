@@ -5,9 +5,27 @@ const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 const App = () => {
   const [itens, setItens] = useState([])
 
+  const handleClickClearList = () => {
+    setItens((i) => [])
+  }
+
   const handleClickFilters = (value) => {
     if (value === 2) {
       setItens((i) => i.filter((item) => item.stored))
+    }
+
+    if (value === 3) {
+      setItens((i) =>
+        i.sort((item1, item2) => {
+          if (item1.name < item2.name) {
+            return -1
+          }
+          if (item1.name > item2.name) {
+            return 1
+          }
+          return 0
+        }),
+      )
     }
   }
 
@@ -92,7 +110,9 @@ const App = () => {
           <option value="2">Mostrar guardados</option>
           <option value="3">Ordem alfabética</option>
         </select>
-        <button className="clearList">Limpar lista</button>
+        <button className="clearList" onClick={handleClickClearList}>
+          Limpar lista
+        </button>
       </div>
     </>
   )

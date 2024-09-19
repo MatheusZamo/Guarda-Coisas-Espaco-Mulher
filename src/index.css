@@ -34,6 +34,7 @@ select {
   text-align: center;
   background-color: rgb(129, 143, 170);
   color: white;
+  cursor: pointer;
 }
 
 input {
@@ -117,6 +118,7 @@ span {
 .filtro {
   width: 200px;
   border: none;
+  cursor: pointer;
 }
 
 .clearList {
@@ -129,8 +131,4 @@ span {
   background-color: rgb(248, 86, 22);
   color: white;
   cursor: pointer;
-}
-
-.hideItem {
-  display: none;
 }
