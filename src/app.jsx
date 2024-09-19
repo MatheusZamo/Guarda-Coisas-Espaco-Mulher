@@ -4,30 +4,9 @@ const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 
 const App = () => {
   const [itens, setItens] = useState([])
+  const [orderBy, setOrderBy] = useState("newest")
 
-  const handleClickClearList = () => {
-    setItens((i) => [])
-  }
-
-  const handleClickFilters = (value) => {
-    if (value === 2) {
-      setItens((i) => i.filter((item) => item.stored))
-    }
-
-    if (value === 3) {
-      setItens((i) =>
-        i.sort((item1, item2) => {
-          if (item1.name < item2.name) {
-            return -1
-          }
-          if (item1.name > item2.name) {
-            return 1
-          }
-          return 0
-        }),
-      )
-    }
-  }
+  const handleClickClearList = () => setItens(() => [])
 
   const handleClickDelete = (id) =>
     setItens((i) => i.filter((item) => item.id !== id))
@@ -58,6 +37,11 @@ const App = () => {
     e.target.reset()
   }
 
+  const handleChangeOrder = (e) => setOrderBy(e.target.value)
+
+  const sortedItems =
+    orderBy === "stored" ? itens.filter((item) => item.stored) : itens
+
   return (
     <>
       <header className="header">
@@ -83,7 +67,7 @@ const App = () => {
       </form>
 
       <ul className="itensGuardados">
-        {itens.map(({ id, quantify, name, stored }) => (
+        {sortedItems.map(({ id, quantify, name, stored }) => (
           <li key={id}>
             <input
               type="checkbox"
@@ -100,20 +84,19 @@ const App = () => {
           </li>
         ))}
       </ul>
-      <div className="filtros">
-        <select
-          name="filtro"
-          className="filtro"
-          onChange={(e) => handleClickFilters(+e.target.value)}
-        >
-          <option value="1">Ordenar por mais recente</option>
-          <option value="2">Mostrar guardados</option>
+      <div className="actions">
+        <select value={orderBy} className="filter" onChange={handleChangeOrder}>
+          <option value="newest">Ordenar por mais recente</option>
+          <option value="stored">Mostrar guardados</option>
           <option value="3">Ordem alfabética</option>
         </select>
         <button className="clearList" onClick={handleClickClearList}>
           Limpar lista
         </button>
       </div>
+      <footer>
+        Você tem {itens.length} itens na lista e já guardou {} (??%)
+      </footer>
     </>
   )
 }
