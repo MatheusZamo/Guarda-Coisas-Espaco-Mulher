@@ -5,6 +5,12 @@ const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 const App = () => {
   const [itens, setItens] = useState([])
 
+  const handleClickFilters = (value) => {
+    if (value === 2) {
+      setItens((i) => i.filter((item) => item.stored))
+    }
+  }
+
   const handleClickDelete = (id) =>
     setItens((i) => i.filter((item) => item.id !== id))
 
@@ -76,6 +82,18 @@ const App = () => {
           </li>
         ))}
       </ul>
+      <div className="filtros">
+        <select
+          name="filtro"
+          className="filtro"
+          onChange={(e) => handleClickFilters(+e.target.value)}
+        >
+          <option value="1">Ordenar por mais recente</option>
+          <option value="2">Mostrar guardados</option>
+          <option value="3">Ordem alfabética</option>
+        </select>
+        <button className="clearList">Limpar lista</button>
+      </div>
     </>
   )
 }
