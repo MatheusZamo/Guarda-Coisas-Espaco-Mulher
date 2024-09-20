@@ -38,6 +38,17 @@ const ListOfItems = ({ sortedItems, onClickCheck, onClickDelete }) => (
   </ul>
 )
 
+const Header = () => (
+  <header className="header">
+    <img
+      src="./public/logo-espaco-mulher.png"
+      alt="logo espaço da mulher"
+      className="logo"
+    />
+    <h1 className="title">Espaço Mulher</h1>
+  </header>
+)
+
 const App = () => {
   const [itens, setItens] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
@@ -80,14 +91,7 @@ const App = () => {
 
   return (
     <>
-      <header className="header">
-        <img
-          src="./public/logo-espaco-mulher.png"
-          alt="logo espaço da mulher"
-          className="logo"
-        />
-        <h1 className="title">Espaço Mulher</h1>
-      </header>
+      <Header />
 
       <FormAddItem onHandleSubmit={handleSubmit} />
 
