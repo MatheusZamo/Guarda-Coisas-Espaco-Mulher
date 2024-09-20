@@ -2,6 +2,21 @@ import { useState } from "react"
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 
+const FormAddItem = ({ onHandleSubmit }) => (
+  <form onSubmit={onHandleSubmit}>
+    <label className="label">O que você precisa guardar ?</label>
+    <select name="quantidade">
+      {ids.map((id, index) => (
+        <option key={id} value={index + 1}>
+          {index + 1}
+        </option>
+      ))}
+    </select>
+    <input name="item" placeholder="Manda aqui" autoFocus />
+    <button className="add">Adicionar</button>
+  </form>
+)
+
 const App = () => {
   const [itens, setItens] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
@@ -53,18 +68,7 @@ const App = () => {
         <h1 className="title">Espaço Mulher</h1>
       </header>
 
-      <form onSubmit={handleSubmit}>
-        <label className="label">O que você precisa guardar ?</label>
-        <select name="quantidade">
-          {ids.map((id, index) => (
-            <option key={id} value={index + 1}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
-        <input name="item" placeholder="Manda aqui" />
-        <button className="add">Adicionar</button>
-      </form>
+      <FormAddItem onHandleSubmit={handleSubmit} />
 
       <ul className="itensGuardados">
         {sortedItems.map(({ id, quantify, name, stored }) => (
