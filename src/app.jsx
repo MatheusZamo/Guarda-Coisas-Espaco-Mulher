@@ -17,6 +17,27 @@ const FormAddItem = ({ onHandleSubmit }) => (
   </form>
 )
 
+const ListOfItems = ({ sortedItems, onClickCheck, onClickDelete }) => (
+  <ul className="itensGuardados">
+    {sortedItems.map(({ id, quantify, name, stored }) => (
+      <li key={id}>
+        <input
+          type="checkbox"
+          className="checkbox"
+          checked={stored}
+          onChange={() => onClickCheck(id)}
+        />
+        <span className={stored ? "line-through" : ""}>
+          {quantify} {name}
+        </span>
+        <button className="close" onClick={() => onClickDelete(id)}>
+          ✖️
+        </button>
+      </li>
+    ))}
+  </ul>
+)
+
 const App = () => {
   const [itens, setItens] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
@@ -70,24 +91,12 @@ const App = () => {
 
       <FormAddItem onHandleSubmit={handleSubmit} />
 
-      <ul className="itensGuardados">
-        {sortedItems.map(({ id, quantify, name, stored }) => (
-          <li key={id}>
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={stored}
-              onChange={() => handleClickCheck(id)}
-            />
-            <span className={stored ? "line-through" : ""}>
-              {quantify} {name}
-            </span>
-            <button className="close" onClick={() => handleClickDelete(id)}>
-              ✖️
-            </button>
-          </li>
-        ))}
-      </ul>
+      <ListOfItems
+        sortedItems={sortedItems}
+        onClickCheck={handleClickCheck}
+        onClickDelete={handleClickDelete}
+      />
+
       <div className="actions">
         <select value={orderBy} className="filter" onChange={handleChangeOrder}>
           <option value="newest">Ordenar por mais recente</option>
