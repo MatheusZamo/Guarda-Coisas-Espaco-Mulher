@@ -28,26 +28,37 @@ const FormAddItem = ({ onHandleSubmit }) => (
   </form>
 )
 
-const ListOfitems = ({ sorteditems, onClickCheck, onClickDelete }) => (
-  <ul>
-    {sorteditems.map(({ id, quantify, name, stored }) => (
-      <li key={id}>
-        <input
-          type="checkbox"
-          className="checkbox"
-          checked={stored}
-          onChange={() => onClickCheck(id)}
-        />
-        <span className={stored ? "line-through" : ""}>
-          {quantify} {name}
-        </span>
-        <button className="close" onClick={() => onClickDelete(id)}>
-          ✖️
-        </button>
-      </li>
-    ))}
-  </ul>
-)
+const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
+  const sorteditems =
+    orderBy === "stored"
+      ? items.filter((item) => item.stored)
+      : orderBy === "alphabetically"
+      ? items.toSorted((a, b) =>
+          a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
+        )
+      : items
+
+  return (
+    <ul>
+      {sorteditems.map(({ id, quantify, name, stored }) => (
+        <li key={id}>
+          <input
+            type="checkbox"
+            className="checkbox"
+            checked={stored}
+            onChange={() => onClickCheck(id)}
+          />
+          <span className={stored ? "line-through" : ""}>
+            {quantify} {name}
+          </span>
+          <button className="close" onClick={() => onClickDelete(id)}>
+            ✖️
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 const Filters = ({ orderBy, onChangeOrder }) => (
   <select value={orderBy} className="filter" onChange={onChangeOrder}>
@@ -118,21 +129,13 @@ const App = () => {
 
   const handleChangeOrder = (e) => setOrderBy(e.target.value)
 
-  const sorteditems =
-    orderBy === "stored"
-      ? items.filter((item) => item.stored)
-      : orderBy === "alphabetically"
-      ? items.toSorted((a, b) =>
-          a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
-        )
-      : items
-
   return (
     <>
       <Header />
       <FormAddItem onHandleSubmit={handleSubmit} />
       <ListOfitems
-        sorteditems={sorteditems}
+        orderBy={orderBy}
+        items={items}
         onClickCheck={handleClickCheck}
         onClickDelete={handleClickDelete}
       />
