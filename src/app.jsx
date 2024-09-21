@@ -28,9 +28,9 @@ const FormAddItem = ({ onHandleSubmit }) => (
   </form>
 )
 
-const ListOfItems = ({ sortedItems, onClickCheck, onClickDelete }) => (
-  <ul className="itensGuardados">
-    {sortedItems.map(({ id, quantify, name, stored }) => (
+const ListOfitems = ({ sorteditems, onClickCheck, onClickDelete }) => (
+  <ul>
+    {sorteditems.map(({ id, quantify, name, stored }) => (
       <li key={id}>
         <input
           type="checkbox"
@@ -53,21 +53,21 @@ const Filters = ({ orderBy, onChangeOrder }) => (
   <select value={orderBy} className="filter" onChange={onChangeOrder}>
     <option value="newest">Ordenar por mais recente</option>
     <option value="stored">Mostrar guardados</option>
-    <option value="3">Ordem alfabética</option>
+    <option value="alphabetically">Ordem alfabética</option>
   </select>
 )
 
 const App = () => {
-  const [itens, setItens] = useState([])
+  const [items, setItems] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
 
-  const handleClickClearList = () => setItens(() => [])
+  const handleClickClearList = () => setItems(() => [])
 
   const handleClickDelete = (id) =>
-    setItens((i) => i.filter((item) => item.id !== id))
+    setItems((i) => i.filter((item) => item.id !== id))
 
   const handleClickCheck = (id) =>
-    setItens((i) =>
+    setItems((i) =>
       i.map((item) =>
         item.id === id ? { ...item, stored: !item.stored } : item,
       ),
@@ -79,7 +79,7 @@ const App = () => {
     const selectValue = e.target.quantidade.value
     const inputValue = e.target.item.value
 
-    setItens((i) => [
+    setItems((i) => [
       ...i,
       {
         id: crypto.randomUUID(),
@@ -94,15 +94,21 @@ const App = () => {
 
   const handleChangeOrder = (e) => setOrderBy(e.target.value)
 
-  const sortedItems =
-    orderBy === "stored" ? itens.filter((item) => item.stored) : itens
+  const sorteditems =
+    orderBy === "stored"
+      ? items.filter((item) => item.stored)
+      : orderBy === "alphabetically"
+      ? items.toSorted((a, b) =>
+          a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
+        )
+      : items
 
   return (
     <>
       <Header />
       <FormAddItem onHandleSubmit={handleSubmit} />
-      <ListOfItems
-        sortedItems={sortedItems}
+      <ListOfitems
+        sorteditems={sorteditems}
         onClickCheck={handleClickCheck}
         onClickDelete={handleClickDelete}
       />
@@ -114,7 +120,7 @@ const App = () => {
         </button>
       </div>
       <footer>
-        Você tem {itens.length} itens na lista e já guardou {} (??%)
+        Você tem {items.length} items na lista e já guardou {} (??%)
       </footer>
     </>
   )
