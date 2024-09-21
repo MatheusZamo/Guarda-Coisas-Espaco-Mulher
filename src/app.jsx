@@ -29,7 +29,7 @@ const FormAddItem = ({ onHandleSubmit }) => (
 )
 
 const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
-  const sorteditems =
+  const sortedItems =
     orderBy === "stored"
       ? items.filter((item) => item.stored)
       : orderBy === "alphabetically"
@@ -40,7 +40,7 @@ const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
 
   return (
     <ul>
-      {sorteditems.map(({ id, quantify, name, stored }) => (
+      {sortedItems.map(({ id, quantify, name, stored }) => (
         <li key={id}>
           <input
             type="checkbox"
@@ -60,12 +60,17 @@ const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
   )
 }
 
-const Filters = ({ orderBy, onChangeOrder }) => (
-  <select value={orderBy} className="filter" onChange={onChangeOrder}>
-    <option value="newest">Ordenar por mais recente</option>
-    <option value="stored">Mostrar guardados</option>
-    <option value="alphabetically">Ordem alfabética</option>
-  </select>
+const Filters = ({ orderBy, onChangeOrder, onClickClearList }) => (
+  <div className="actions">
+    <select value={orderBy} className="filter" onChange={onChangeOrder}>
+      <option value="newest">Ordenar por mais recente</option>
+      <option value="stored">Mostrar guardados</option>
+      <option value="alphabetically">Ordem alfabética</option>
+    </select>
+    <button className="clearList" onClick={onClickClearList}>
+      Limpar lista
+    </button>
+  </div>
 )
 
 const Stats = ({ items }) => {
@@ -139,13 +144,11 @@ const App = () => {
         onClickCheck={handleClickCheck}
         onClickDelete={handleClickDelete}
       />
-
-      <div className="actions">
-        <Filters orderBy={orderBy} onChangeOrder={handleChangeOrder} />
-        <button className="clearList" onClick={handleClickClearList}>
-          Limpar lista
-        </button>
-      </div>
+      <Filters
+        orderBy={orderBy}
+        onChangeOrder={handleChangeOrder}
+        onClickClearList={handleClickClearList}
+      />
       <Stats items={items} />
     </>
   )
