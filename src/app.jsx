@@ -2,10 +2,10 @@ import { useState } from "react"
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 
-const Header = () => (
+const Logo = () => (
   <header className="header">
     <img
-      src="./public/logo-espaco-mulher.png"
+      src="logo-espaco-mulher.png"
       alt="logo espaço da mulher"
       className="logo"
     />
@@ -49,7 +49,7 @@ const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
             onChange={() => onClickCheck(id)}
           />
           <span className={stored ? "line-through" : ""}>
-            {quantify} {name}
+            {quantify} - {name}
           </span>
           <button className="close" onClick={() => onClickDelete(id)}>
             ✖️
@@ -97,11 +97,11 @@ const Stats = ({ items }) => {
   )
 }
 
-const App = () => {
+const useItems = () => {
   const [items, setItems] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
 
-  const handleClickClearList = () => setItems(() => [])
+  const handleClickClearList = () => setItems([])
 
   const handleClickDelete = (id) =>
     setItems((i) => i.filter((item) => item.id !== id))
@@ -134,9 +134,31 @@ const App = () => {
 
   const handleChangeOrder = (e) => setOrderBy(e.target.value)
 
+  return {
+    items,
+    orderBy,
+    handleClickClearList,
+    handleClickDelete,
+    handleClickCheck,
+    handleSubmit,
+    handleChangeOrder,
+  }
+}
+
+const App = () => {
+  const {
+    items,
+    orderBy,
+    handleClickClearList,
+    handleClickDelete,
+    handleClickCheck,
+    handleSubmit,
+    handleChangeOrder,
+  } = useItems()
+
   return (
     <>
-      <Header />
+      <Logo />
       <FormAddItem onHandleSubmit={handleSubmit} />
       <ListOfitems
         orderBy={orderBy}
