@@ -1,6 +1,6 @@
 # Sistema Web de Academia
 
-Este projeto é um sistema web, para auxiliar donos de academia, a gerenciar os objetos que devem ser guardados.
+Este projeto é um sistema web, para gerenciar os objetos que devem ser guardados.
 
 **Funcionalidades:**
 
