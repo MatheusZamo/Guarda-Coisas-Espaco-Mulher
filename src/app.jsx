@@ -2,6 +2,17 @@ import { useState } from "react"
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 
+const Header = () => (
+  <header className="header">
+    <img
+      src="./public/logo-espaco-mulher.png"
+      alt="logo espaço da mulher"
+      className="logo"
+    />
+    <h1 className="title">Espaço Mulher</h1>
+  </header>
+)
+
 const FormAddItem = ({ onHandleSubmit }) => (
   <form onSubmit={onHandleSubmit}>
     <label className="label">O que você precisa guardar ?</label>
@@ -38,15 +49,12 @@ const ListOfItems = ({ sortedItems, onClickCheck, onClickDelete }) => (
   </ul>
 )
 
-const Header = () => (
-  <header className="header">
-    <img
-      src="./public/logo-espaco-mulher.png"
-      alt="logo espaço da mulher"
-      className="logo"
-    />
-    <h1 className="title">Espaço Mulher</h1>
-  </header>
+const Filters = ({ orderBy, onChangeOrder }) => (
+  <select value={orderBy} className="filter" onChange={onChangeOrder}>
+    <option value="newest">Ordenar por mais recente</option>
+    <option value="stored">Mostrar guardados</option>
+    <option value="3">Ordem alfabética</option>
+  </select>
 )
 
 const App = () => {
@@ -92,9 +100,7 @@ const App = () => {
   return (
     <>
       <Header />
-
       <FormAddItem onHandleSubmit={handleSubmit} />
-
       <ListOfItems
         sortedItems={sortedItems}
         onClickCheck={handleClickCheck}
@@ -102,11 +108,7 @@ const App = () => {
       />
 
       <div className="actions">
-        <select value={orderBy} className="filter" onChange={handleChangeOrder}>
-          <option value="newest">Ordenar por mais recente</option>
-          <option value="stored">Mostrar guardados</option>
-          <option value="3">Ordem alfabética</option>
-        </select>
+        <Filters orderBy={orderBy} onChangeOrder={handleChangeOrder} />
         <button className="clearList" onClick={handleClickClearList}>
           Limpar lista
         </button>
