@@ -57,6 +57,30 @@ const Filters = ({ orderBy, onChangeOrder }) => (
   </select>
 )
 
+const Stats = ({ items }) => {
+  const storedItems = items.reduce(
+    (acc, item) => (item.stored ? acc + 1 : acc),
+    0,
+  )
+  const storedPercentage =
+    items.length === 0 ? 0 : ((storedItems / items.length) * 100).toFixed(0)
+  const singularPlural = items.length === 1 ? "item" : "itens"
+
+  return (
+    <footer>
+      <p>
+        {`Você tem ${items.length} ${singularPlural} na lista`}
+        {items.length > 0 && (
+          <span>
+            {" "}
+            e já guardou {storedItems} ({storedPercentage}%)
+          </span>
+        )}
+      </p>
+    </footer>
+  )
+}
+
 const App = () => {
   const [items, setItems] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
@@ -119,9 +143,7 @@ const App = () => {
           Limpar lista
         </button>
       </div>
-      <footer>
-        Você tem {items.length} items na lista e já guardou {} (??%)
-      </footer>
+      <Stats items={items} />
     </>
   )
 }
