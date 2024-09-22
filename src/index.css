@@ -12,7 +12,7 @@
 }
 
 .title {
-  color: rgb(235, 211, 134);
+  color: rgb(195, 152, 243);
   font-size: 3rem;
   margin-left: 15px;
   margin-top: 50px;
@@ -72,6 +72,7 @@ ul {
   display: flex;
   flex-wrap: wrap;
   height: 280px;
+  overflow-y: auto;
 }
 
 li {
@@ -79,11 +80,12 @@ li {
   width: 250px;
   height: 50px;
   text-align: center;
-  background-color: rgb(235, 211, 134);
+  background-color: rgb(107, 152, 236);
   margin: 20px;
+  margin-left: 60px;
   padding-top: 30px;
   border-radius: 10px;
-  color: rgb(7, 50, 129);
+  color: black;
   display: flex;
 }
 
@@ -146,4 +148,19 @@ footer {
 
 input::placeholder {
   color: white;
+}
+
+@media only screen and (max-width: 700px) {
+  input {
+    width: 120px;
+  }
+
+  label {
+    font-size: 12px;
+    margin-left: 10px;
+  }
+
+  footer {
+    font-size: 17px;
+  }
 }
