@@ -1,159 +1,9 @@
-import { useState } from "react"
-
-const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
-
-const Logo = () => (
-  <header className="header">
-    <img
-      src="logo-espaco-mulher.png"
-      alt="logo espaço da mulher"
-      className="logo"
-    />
-    <h1 className="title">Espaço Mulher</h1>
-  </header>
-)
-
-const FormAddItem = ({ onSubmitItem }) => {
-  const [inputValue, setInputValue] = useState("")
-  const [selectValue, setSelectValue] = useState("1")
-
-  const handleChangeInput = (e) => setInputValue(e.target.value)
-  const handleChangeSelect = (e) => setSelectValue(e.target.value)
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    onSubmitItem({
-      id: crypto.randomUUID(),
-      quantify: +selectValue,
-      name: inputValue,
-      stored: false,
-    })
-
-    setInputValue("")
-    setSelectValue("1")
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label className="label">O que você precisa guardar ?</label>
-      <select value={selectValue} onChange={handleChangeSelect}>
-        {ids.map((id, index) => (
-          <option key={id} value={index + 1}>
-            {index + 1}
-          </option>
-        ))}
-      </select>
-      <input
-        placeholder="Manda aqui"
-        autoFocus
-        value={inputValue}
-        onChange={handleChangeInput}
-      />
-      <button className="add">Adicionar</button>
-    </form>
-  )
-}
-
-const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
-  const sortedItems =
-    orderBy === "stored"
-      ? items.filter((item) => item.stored)
-      : orderBy === "alphabetically"
-      ? items.toSorted((a, b) =>
-          a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
-        )
-      : items
-
-  return (
-    <ul>
-      {sortedItems.map(({ id, quantify, name, stored }) => (
-        <li key={id}>
-          <input
-            type="checkbox"
-            className="checkbox"
-            checked={stored}
-            onChange={() => onClickCheck(id)}
-          />
-          <span className={stored ? "line-through" : ""}>
-            {quantify} - {name}
-          </span>
-          <button className="close" onClick={() => onClickDelete(id)}>
-            ✖️
-          </button>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-const Filters = ({ orderBy, onChangeOrder, onClickClearList }) => (
-  <div className="actions">
-    <select value={orderBy} className="filter" onChange={onChangeOrder}>
-      <option value="newest">Ordenar por mais recente</option>
-      <option value="stored">Mostrar guardados</option>
-      <option value="alphabetically">Ordem alfabética</option>
-    </select>
-    <button className="clearList" onClick={onClickClearList}>
-      Limpar lista
-    </button>
-  </div>
-)
-
-const Stats = ({ items }) => {
-  const storedItems = items.reduce(
-    (acc, item) => (item.stored ? acc + 1 : acc),
-    0,
-  )
-  const storedPercentage =
-    items.length === 0 ? 0 : ((storedItems / items.length) * 100).toFixed(0)
-  const singularPlural = items.length === 1 ? "item" : "itens"
-
-  return (
-    <footer>
-      <p>
-        {`Você tem ${items.length} ${singularPlural} na lista`}
-        {items.length > 0 && (
-          <span>
-            {" "}
-            e já guardou {storedItems} ({storedPercentage}%)
-          </span>
-        )}
-      </p>
-    </footer>
-  )
-}
-
-const useItems = () => {
-  const [items, setItems] = useState([])
-  const [orderBy, setOrderBy] = useState("newest")
-
-  const handleSubmitForm = (newItem) => setItems((prev) => [...prev, newItem])
-
-  const handleClickClearList = () => setItems([])
-
-  const handleClickDelete = (id) =>
-    setItems((i) => i.filter((item) => item.id !== id))
-
-  const handleClickCheck = (id) =>
-    setItems((i) =>
-      i.map((item) =>
-        item.id === id ? { ...item, stored: !item.stored } : item,
-      ),
-    )
-
-  const handleChangeOrder = (e) => setOrderBy(e.target.value)
-
-  return {
-    items,
-    orderBy,
-    handleSubmitForm,
-    handleClickClearList,
-    handleClickDelete,
-    handleClickCheck,
-    handleChangeOrder,
-  }
-}
+import { useItems } from "./hooks/use-items"
+import { Logo } from "./components/logo"
+import { FormAddItem } from "./components/form-add-item"
+import { ListOfItems } from "./components/list-of-items"
+import { Filters } from "./components/filters"
+import { Stats } from "./components/stats"
 
 const App = () => {
   const {
@@ -170,7 +20,7 @@ const App = () => {
     <>
       <Logo />
       <FormAddItem onSubmitItem={handleSubmitForm} />
-      <ListOfitems
+      <ListOfItems
         orderBy={orderBy}
         items={items}
         onClickCheck={handleClickCheck}
