@@ -13,20 +13,47 @@ const Logo = () => (
   </header>
 )
 
-const FormAddItem = ({ onHandleSubmit }) => (
-  <form onSubmit={onHandleSubmit}>
-    <label className="label">O que você precisa guardar ?</label>
-    <select name="quantidade">
-      {ids.map((id, index) => (
-        <option key={id} value={index + 1}>
-          {index + 1}
-        </option>
-      ))}
-    </select>
-    <input name="item" placeholder="Manda aqui" autoFocus />
-    <button className="add">Adicionar</button>
-  </form>
-)
+const FormAddItem = ({ onSubmitItem }) => {
+  const [inputValue, setInputValue] = useState("")
+  const [selectValue, setSelectValue] = useState("1")
+
+  const handleChangeInput = (e) => setInputValue(e.target.value)
+  const handleChangeSelect = (e) => setSelectValue(e.target.value)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    onSubmitItem({
+      id: crypto.randomUUID(),
+      quantify: +selectValue,
+      name: inputValue,
+      stored: false,
+    })
+
+    setInputValue("")
+    setSelectValue("1")
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label className="label">O que você precisa guardar ?</label>
+      <select value={selectValue} onChange={handleChangeSelect}>
+        {ids.map((id, index) => (
+          <option key={id} value={index + 1}>
+            {index + 1}
+          </option>
+        ))}
+      </select>
+      <input
+        placeholder="Manda aqui"
+        autoFocus
+        value={inputValue}
+        onChange={handleChangeInput}
+      />
+      <button className="add">Adicionar</button>
+    </form>
+  )
+}
 
 const ListOfitems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
   const sortedItems =
@@ -101,6 +128,8 @@ const useItems = () => {
   const [items, setItems] = useState([])
   const [orderBy, setOrderBy] = useState("newest")
 
+  const handleSubmitForm = (newItem) => setItems((prev) => [...prev, newItem])
+
   const handleClickClearList = () => setItems([])
 
   const handleClickDelete = (id) =>
@@ -113,34 +142,15 @@ const useItems = () => {
       ),
     )
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    const selectValue = e.target.quantidade.value
-    const inputValue = e.target.item.value
-
-    setItems((i) => [
-      ...i,
-      {
-        id: crypto.randomUUID(),
-        quantify: +selectValue,
-        name: inputValue,
-        stored: false,
-      },
-    ])
-
-    e.target.reset()
-  }
-
   const handleChangeOrder = (e) => setOrderBy(e.target.value)
 
   return {
     items,
     orderBy,
+    handleSubmitForm,
     handleClickClearList,
     handleClickDelete,
     handleClickCheck,
-    handleSubmit,
     handleChangeOrder,
   }
 }
@@ -149,17 +159,17 @@ const App = () => {
   const {
     items,
     orderBy,
+    handleSubmitForm,
     handleClickClearList,
     handleClickDelete,
     handleClickCheck,
-    handleSubmit,
     handleChangeOrder,
   } = useItems()
 
   return (
     <>
       <Logo />
-      <FormAddItem onHandleSubmit={handleSubmit} />
+      <FormAddItem onSubmitItem={handleSubmitForm} />
       <ListOfitems
         orderBy={orderBy}
         items={items}
