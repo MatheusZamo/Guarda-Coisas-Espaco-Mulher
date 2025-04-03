@@ -1,3 +1,5 @@
+import styles from "./stats.module.css"
+
 const Stats = ({ items }) => {
   const storedItems = items.reduce(
     (acc, item) => (item.stored ? acc + 1 : acc),

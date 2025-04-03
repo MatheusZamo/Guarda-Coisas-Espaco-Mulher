@@ -1,0 +1,52 @@
+label {
+  margin-right: 15px;
+  color: white;
+  font-size: 18px;
+}
+
+select {
+  width: 60px;
+  height: 30px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgb(129, 143, 170);
+  color: white;
+  cursor: pointer;
+}
+
+input {
+  width: 180px;
+  height: 30px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgb(129, 143, 170);
+  color: white;
+}
+
+input::placeholder {
+  color: white;
+}
+
+.add {
+  width: 80px;
+  height: 30px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgb(231, 34, 34);
+  color: white;
+  cursor: pointer;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  background-color: rgb(67, 104, 173);
+  height: 50px;
+}

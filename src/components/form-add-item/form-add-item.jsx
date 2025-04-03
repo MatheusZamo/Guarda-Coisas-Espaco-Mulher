@@ -1,4 +1,5 @@
 import { useState } from "react"
+import styles from "./form-add-item.module.css"
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID())
 
@@ -25,7 +26,7 @@ const FormAddItem = ({ onSubmitItem }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label className="label">O que você precisa guardar ?</label>
+      <label>O que você precisa guardar ?</label>
       <select value={selectValue} onChange={handleChangeSelect}>
         {ids.map((id, index) => (
           <option key={id} value={index + 1}>
@@ -39,7 +40,7 @@ const FormAddItem = ({ onSubmitItem }) => {
         value={inputValue}
         onChange={handleChangeInput}
       />
-      <button className="add">Adicionar</button>
+      <button className={styles.add}>Adicionar</button>
     </form>
   )
 }

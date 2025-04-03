@@ -1,3 +1,5 @@
+import styles from "./list-of-items.module.css"
+
 const ListOfItems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
   const sortedItems =
     orderBy === "stored"
@@ -14,14 +16,14 @@ const ListOfItems = ({ orderBy, items, onClickCheck, onClickDelete }) => {
         <li key={id}>
           <input
             type="checkbox"
-            className="checkbox"
+            className={styles.checkbox}
             checked={stored}
             onChange={() => onClickCheck(id)}
           />
-          <span className={stored ? "line-through" : ""}>
+          <span className={stored ? styles.linethrough : ""}>
             {quantify} - {name}
           </span>
-          <button className="close" onClick={() => onClickDelete(id)}>
+          <button className={styles.close} onClick={() => onClickDelete(id)}>
             ✖️
           </button>
         </li>
